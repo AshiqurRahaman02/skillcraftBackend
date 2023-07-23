@@ -1,6 +1,7 @@
 const express = require("express");
 const UserModel = require("../models/user.model");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt"); 
+const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -36,7 +37,8 @@ authRouter.get("/github", async (req, res) => {
 	).then((res) => res.json());
 	console.log(accessToken);
 
-	const user = await fetch("https://api.github.com/user", {
+	const user = await fetch("https://api.github.com/user", { 
+		method: "GET",
 		headers: {
 			Authorization: "Bearer " + accessToken.access_token,
 		},
@@ -66,7 +68,7 @@ passport.use(
 		{
 			clientID: GOOGLE_CLIENT_ID,
 			clientSecret: GOOGLE_CLIENT_SECRET,
-			callbackURL: "http://localhost:8080/auth/google/callback",
+			callbackURL: "https://gleaming-stockings-bull.cyclic.app/auth/google/callback",
 			passReqToCallback: true,
 		},
 		async function (request, accessToken, refreshToken, profile, done) {
